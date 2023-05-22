@@ -1,0 +1,18 @@
+{
+    "schema_version": "v1",
+    "name_for_human": "Tryp.com",
+    "name_for_model": "trypcom",
+    "description_for_human": "The Tryp.com plugin for ChatGPT",
+    "description_for_model": "The Tryp.com plugin for ChatGPT",
+    "auth": {
+        "type": "none"
+    },
+    "api": {
+        "type": "openapi",
+        "url": "https://tryp-gpt.glitch.me/openapi.json",
+        "is_user_authenticated": false
+    },
+    "logo_url": "https://tryp-gpt.glitch.me/assets/logo.png",
+    "contact_email": "info@tryp.com",
+    "legal_info_url": "https://www.tryp.com/en/terms-and-conditions"
+}

@@ -1,0 +1,271 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Tryp.com",
+    "description": "The Tryp.com plugin for ChatGPT",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://tryp-gpt.glitch.me"
+    }
+  ],
+  "paths": {
+    "/trip/{packageID}": {
+      "get": {
+        "operationId": "getPackageByID",
+        "summary": "Get Tryp details from an ID. Tip for ChatGPT: Use proper markdown formatting in your response and optionally include a guide.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "packageID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The package ID. Located at the last digits of the trip URL (e.g. tryp.com/en/packages/9433840 package id is 9433840)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/fetchPackage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/search": {
+      "get": {
+        "operationId": "search",
+        "summary": "Search for packages with Tryp.com",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "initialLocation",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "User's from. Reply in LOCODE (required)"
+          },
+          {
+            "in": "query",
+            "name": "max_price",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Max price in € (optional)"
+          },
+          {
+            "in": "query",
+            "name": "includeLocations",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "required": false,
+            "description": "Array of locations to include. Options: caribbean,Melanesia,polynesia,australasia,eastern-asia,south-eastern-asia,southern-asia,central-asia,western-asia,eastern-africa,northern-africa,western-africa,central-africa,southern-africa,northern-america,central-america,southern-america,eastern-europe,central-europe,southern-europe,western-europe,northern-europe,micronesia,europe,asia,africa or country ISO code (optional)"
+          },
+          {
+            "in": "query",
+            "name": "excludeLocations",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "required": false,
+            "description": "Array of locations to exclude. Options: caribbean,Melanesia,polynesia,australasia,eastern-asia,south-eastern-asia,southern-asia,central-asia,western-asia,eastern-africa,northern-africa,western-africa,central-africa,southern-africa,northern-america,central-america,southern-america,eastern-europe,central-europe,southern-europe,western-europe,northern-europe,micronesia,europe,asia,africa or country ISO code (optional)"
+          },
+          {
+            "in": "query",
+            "name": "windowStart",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Date of start. Format: YYYY-MM-DD (optional)"
+          },
+          {
+            "in": "query",
+            "name": "windowEnd",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Date of end. Format: YYYY-MM-DD (optional)"
+          },
+          {
+            "in": "query",
+            "name": "flexibleDates",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false,
+            "description": "True if dates are flexible, else false (optional)"
+          },
+          {
+            "in": "query",
+            "name": "stayLength",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Stay length. Options: weekend-getaway or any number (optional)"
+          },
+          {
+            "in": "query",
+            "name": "n_adults",
+            "schema": {
+              "type": "number"
+            },
+            "required": false,
+            "description": "Number of adults (optional)"
+          },
+          {
+            "in": "query",
+            "name": "n_children",
+            "schema": {
+              "type": "number"
+            },
+            "required": false,
+            "description": "Number of children (optional)"
+          },
+          {
+            "in": "query",
+            "name": "n_babies",
+            "schema": {
+              "type": "number"
+            },
+            "required": false,
+            "description": "Number of babies (optional)"
+          },
+          {
+            "in": "query",
+            "name": "travellingStyle",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Travelling style. Available options: sustainable, confort, budget (optional)"
+          },
+          {
+            "in": "query",
+            "name": "categories",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Categories. Available options: beach, nature, romantic (optional)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/search"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/locode": {
+      "get": {
+        "operationId": "getLocode",
+        "summary": "Convert contry name and city to locode. ",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "country",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Country name. Example: Portugal (required)"
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "City name. Example: Lisboa (required)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocodeResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/about": {
+      "get": {
+        "operationId": "AboutTryp",
+        "summary": "Get info about tryp.com",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AboutTryp"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "fetchPackage": {
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "number",
+            "items": {
+              "type": "string"
+            },
+            "description": "The package ID. Located at the last digits of the trip URL (e.g. tryp.com/en/packages/9433840 package id is 9433840)"
+          }
+        }
+      },
+      "search": {
+        "type": "object",
+        "properties": {}
+      },
+      "AboutTryp": {
+        "type": "text",
+        "properties": {}
+      },
+      "LocodeResult": {
+        "type": "text",
+        "properties": {}
+      }
+    }
+  }
+}
