@@ -7,7 +7,7 @@ app.use(express.static("public"));
 app.get("/trip/:trip", async function (req, res) {
   const result = await (
     await fetch(
-      "https://5hulox4yxh.execute-api.eu-central-1.amazonaws.com/prod/trip?tripID=9433840",
+      "https://5hulox4yxh.execute-api.eu-central-1.amazonaws.com/prod/trip?tripID=" + req.params.trip,
       {
         credentials: "omit",
         headers: {
@@ -19,10 +19,13 @@ app.get("/trip/:trip", async function (req, res) {
       }
     )
   ).json();
-    var newResult = JSON.stringify(result);
-  newResult = newResult.replace(/https:\/\/pictures.tryp.com\/locations\/(\d+)/gm, function (a, b, c) {
-return a + "/188160.png#"
-});
+  var newResult = JSON.stringify(result);
+  newResult = newResult.replace(
+    /https:\/\/pictures.tryp.com\/locations\/(\d+)/gm,
+    function (a, b, c) {
+      return a + "/188160.png#";
+    }
+  );
   newResult = JSON.parse(newResult);
   res.send(newResult);
 });
@@ -45,30 +48,35 @@ app.get("/api/search", async function (req, res) {
       }
     )
   ).json();
-  
-  var newSearch = JSON.stringify(result);
-  newSearch = newSearch.replace(/https:\/\/pictures.tryp.com\/locations\/(\d+)/gm, function (a, b, c) {
-return a + "/188160.png#"
-});
-  newSearch = JSON.parse(newSearch);
-  
-  res.send(newSearch)
-});
 
+  var newSearch = JSON.stringify(result);
+  newSearch = newSearch.replace(
+    /https:\/\/pictures.tryp.com\/locations\/(\d+)/gm,
+    function (a, b, c) {
+      return a + "/188160.png#";
+    }
+  );
+  newSearch = JSON.parse(newSearch);
+
+  res.send(newSearch);
+});
 
 app.get("/api/locode/", async function (req, res) {
   // get locode
   const country = req.query.country;
   const name = req.query.name;
-  const locodes = require(__dirname + '/public/assets/locodes.json');
-  const locode = locodes.find(item => ((item.country_name.toLowerCase() == country.toLowerCase()) && (item.name == name)))
+  const locodes = require(__dirname + "/public/assets/locodes.json");
+  const locode = locodes.find(
+    (item) =>
+      item.country_name.toLowerCase() == country.toLowerCase() &&
+      item.name == name
+  );
   if (!locode) {
-    return res.send("Can't find locode")
+    return res.send("Can't find locode");
   }
-  
+
   res.send(locode.locode);
 });
-
 
 app.get("/about", function (request, response) {
   response.sendFile(__dirname + "/public/assets/about/general.txt");
