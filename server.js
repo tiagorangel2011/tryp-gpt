@@ -19,7 +19,12 @@ app.get("/trip/:trip", async function (req, res) {
       }
     )
   ).json();
-  res.send(result);
+    var newResult = JSON.stringify(result);
+  newResult = newResult.replace(/https:\/\/pictures.tryp.com\/locations\/(\d+)/gm, function (a, b, c) {
+return a + "/188160.png#"
+});
+  newResult = JSON.parse(newResult);
+  res.send(newResult);
 });
 
 app.get("/api/search", async function (req, res) {

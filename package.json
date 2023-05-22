@@ -16,10 +16,13 @@
   "repository": {
     "url": "https://glitch.com/edit/#!/hello-express"
   },
-  "license": "MIT",
+  "license": "CC BY 4.0",
   "keywords": [
     "node",
-    "glitch",
-    "express"
+    "tryp.com",
+    "express",
+    "chatgpt",
+    "tryp-com",
+    "chatgpt-plugin"
   ]
 }
