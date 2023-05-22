@@ -1,2 +1,3 @@
 # tryp-gpt
-Tryp.com ChatGPT plugin
+
+Tryp.com unofficial ChatGPT Plugin.
