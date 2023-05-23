@@ -1,7 +1,7 @@
 {
-  "name": "hello-express",
+  "name": "tryp-gpt",
   "version": "0.0.1",
-  "description": "A simple Node app built on Express, instantly up and running.",
+  "description": "Tryp.com ChatGPT Plugin",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -14,7 +14,7 @@
     "node": "14.x"
   },
   "repository": {
-    "url": "https://glitch.com/edit/#!/hello-express"
+    "url": "https://glitch.com/edit/#!/tryp-gpt"
   },
   "license": "CC BY 4.0",
   "keywords": [

@@ -186,7 +186,7 @@
     "/api/locode": {
       "get": {
         "operationId": "getLocode",
-        "summary": "Convert contry name and city to locode. ",
+        "summary": "Convert contry name and city to locode.",
         "parameters": [
           {
             "in": "query",
@@ -195,7 +195,7 @@
               "type": "string"
             },
             "required": true,
-            "description": "Country name. Example: Portugal (required)"
+            "description": "Country name. Example: Portugal. Should be in english. (required)"
           },
           {
             "in": "query",
@@ -204,7 +204,7 @@
               "type": "string"
             },
             "required": true,
-            "description": "City name. Example: Lisboa (required)"
+            "description": "City name. Example: Lisboa. Should be in the language of country. (required)"
           }
         ],
         "responses": {
