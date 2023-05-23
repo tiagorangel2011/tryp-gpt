@@ -32,9 +32,20 @@ app.get("/trip/:trip", async function (req, res) {
 });
 
 app.get("/api/search", async function (req, res) {
+  const loc_country = req.query.startCountry;
+  const loc_city = req.query.startCity;
+
+  const locodes = require(__dirname + "/public/assets/locodes.json");
+  const locode = locodes.find(
+    (item) =>
+      item.country_name.toLowerCase() == loc_country.toLowerCase() &&
+      item.name.toLowerCase() == loc_city.toLowerCase()
+  );
+
   const params = Object.entries(req.query)
     .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
     .join("&");
+  params["initialLocation"] = locode;
 
   const result = await (
     await fetch(
@@ -74,7 +85,9 @@ app.get("/api/locode/", async function (req, res) {
       item.name.toLowerCase() == name.toLowerCase()
   );
   if (!locode) {
-    return res.send("Can't find locode. Make sure the country name is in English and the city name is in the country's language.");
+    return res.send(
+      "Can't find locode. Make sure the country name is in English and the city name is in the country's language."
+    );
   }
 
   res.send(locode.locode);

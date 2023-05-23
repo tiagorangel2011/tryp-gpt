@@ -47,12 +47,21 @@
         "parameters": [
           {
             "in": "query",
-            "name": "initialLocation",
+            "name": "startCountry",
             "schema": {
               "type": "string"
             },
             "required": true,
-            "description": "User's from. Reply in LOCODE (required)"
+            "description": "User's from country. Must be in English. Example: Portugal. (required)"
+          },
+          {
+            "in": "query",
+            "name": "startCity",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "User's from city. Must be in from country's language. Example: Lisboa. (required)"
           },
           {
             "in": "query",
@@ -183,44 +192,6 @@
         }
       }
     },
-    "/api/locode": {
-      "get": {
-        "operationId": "getLocode",
-        "summary": "Convert contry name and city to locode.",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "country",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "Country name. Example: Portugal. Should be in english. (required)"
-          },
-          {
-            "in": "query",
-            "name": "name",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "City name. Example: Lisboa. Should be in the language of country. (required)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/LocodeResult"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/about": {
       "get": {
         "operationId": "AboutTryp",
@@ -259,10 +230,6 @@
         "properties": {}
       },
       "AboutTryp": {
-        "type": "text",
-        "properties": {}
-      },
-      "LocodeResult": {
         "type": "text",
         "properties": {}
       }
