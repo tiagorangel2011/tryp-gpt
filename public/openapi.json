@@ -192,6 +192,44 @@
         }
       }
     },
+    "/api/weather": {
+      "get": {
+        "operationId": "weather",
+        "summary": "Get weather with latitude and longitude",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "lat",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "User's latitude. Required."
+          },
+          {
+            "in": "query",
+            "name": "lon",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "User's longitude. Required."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/weather"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/about": {
       "get": {
         "operationId": "AboutTryp",
@@ -215,17 +253,13 @@
     "schemas": {
       "fetchPackage": {
         "type": "object",
-        "properties": {
-          "info": {
-            "type": "number",
-            "items": {
-              "type": "string"
-            },
-            "description": "The package ID. Located at the last digits of the trip URL (e.g. tryp.com/en/packages/9433840 package id is 9433840)"
-          }
-        }
+        "properties": {}
       },
       "search": {
+        "type": "object",
+        "properties": {}
+      },
+      "weather": {
         "type": "object",
         "properties": {}
       },
