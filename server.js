@@ -93,6 +93,26 @@ app.get("/api/weather", async function (req, res) {
   res.send(result);
 });
 
+app.get("/api/aqi", async function (req, res) {
+  telemetryPush("get_aqi");
+  const lat = encodeURIComponent(req.query.lat);
+  const lon = encodeURIComponent(req.query.lon);
+
+  const result = await (
+    await fetch(
+      `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&hourly=pm10,pm2_5,carbon_monoxide,ozone,european_aqi,us_aqi`,
+      {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+        },
+      }
+    )
+  ).json();
+
+  res.send(result);
+});
+
 app.get("/about", function (request, response) {
   telemetryPush("about_tryp")
   response.sendFile(__dirname + "/public/assets/about/general.txt");

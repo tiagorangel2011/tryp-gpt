@@ -222,7 +222,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/weather"
+                  "$ref": "#/components/schemas/air_api"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+        "/api/aqi": {
+      "get": {
+        "operationId": "get_aqi",
+        "summary": "Get city air quality with latitude and longitude",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "lat",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "User's latitude. Required."
+          },
+          {
+            "in": "query",
+            "name": "lon",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "User's longitude. Required."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/air_api"
                 }
               }
             }
@@ -259,7 +297,7 @@
         "type": "object",
         "properties": {}
       },
-      "weather": {
+      "air_api": {
         "type": "object",
         "properties": {}
       },
