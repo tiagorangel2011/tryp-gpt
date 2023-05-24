@@ -5,6 +5,7 @@ const app = express();
 app.use(express.static("public"));
 
 app.get("/trip/:trip", async function (req, res) {
+  telemetryPush("get_trip");
   const result = await (
     await fetch(
       "https://5hulox4yxh.execute-api.eu-central-1.amazonaws.com/prod/trip?tripID=" +
@@ -31,6 +32,7 @@ app.get("/trip/:trip", async function (req, res) {
   res.send(newResult);
 });
 app.get("/api/search", async function (req, res) {
+  telemetryPush("search_event");
   const loc_country = req.query.startCountry;
   const loc_city = req.query.startCity;
 
@@ -72,16 +74,17 @@ app.get("/api/search", async function (req, res) {
   res.send(newSearch);
 });
 app.get("/api/weather", async function (req, res) {
+  telemetryPush("get_weather");
   const lat = encodeURIComponent(req.query.lat);
   const lon = encodeURIComponent(req.query.lon);
-  
+
   const result = await (
     await fetch(
       `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_sum,rain_sum&past_days=7&forecast_days=16&timezone=auto`,
       {
         method: "GET",
         headers: {
-          "content-type": "application/json"
+          "content-type": "application/json",
         },
       }
     )
@@ -91,10 +94,27 @@ app.get("/api/weather", async function (req, res) {
 });
 
 app.get("/about", function (request, response) {
+  telemetryPush("about_tryp")
   response.sendFile(__dirname + "/public/assets/about/general.txt");
 });
 
+app.get("/statistics", function (request, response) {
+  const qjson = require("qjson-db");
+  const db = new qjson(__dirname + "/public/assets/telemetry.json");
+  response.send(`<!DOCTYPE html><html><head><title>Statistics</title></head><body><h1>Statistics</h1><pre>${JSON.stringify(db.JSON())}</pre></body></html>`);
+});
+
+const telemetryPush = function (event) {
+  const qjson = require("qjson-db");
+  const db = new qjson(__dirname + "/public/assets/telemetry.json");
+
+  db.set(event, (db.get(event) || 0) + 1);
+  return db.JSON();
+};
+
+
 app.get("/.well-known/ai-plugin.json", function (request, response) {
+  telemetryPush("manifest-fetched")
   response.sendFile(__dirname + "/public/ai-plugin.json");
 });
 
