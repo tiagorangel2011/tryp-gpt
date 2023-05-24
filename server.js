@@ -30,7 +30,6 @@ app.get("/trip/:trip", async function (req, res) {
   newResult = JSON.parse(newResult);
   res.send(newResult);
 });
-
 app.get("/api/search", async function (req, res) {
   const loc_country = req.query.startCountry;
   const loc_city = req.query.startCity;
@@ -72,25 +71,23 @@ app.get("/api/search", async function (req, res) {
 
   res.send(newSearch);
 });
+app.get("/api/weather", async function (req, res) {
+  const lat = encodeURIComponent(req.query.lat);
+  const lon = encodeURIComponent(req.query.lon);
+  
+  const result = await (
+    await fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_sum,rain_sum&past_days=7&forecast_days=16&timezone=auto`,
+      {
+        method: "GET",
+        headers: {
+          "content-type": "application/json"
+        },
+      }
+    )
+  ).json();
 
-app.get("/api/locode/", async function (req, res) {
-  // get locode
-  const country = req.query.country;
-  const name = req.query.name;
-  const locodes = require(__dirname + "/public/assets/locodes.json");
-  console.log(country.toLowerCase(), name.toLowerCase());
-  const locode = locodes.find(
-    (item) =>
-      item.country_name.toLowerCase() == country.toLowerCase() &&
-      item.name.toLowerCase() == name.toLowerCase()
-  );
-  if (!locode) {
-    return res.send(
-      "Can't find locode. Make sure the country name is in English and the city name is in the country's language."
-    );
-  }
-
-  res.send(locode.locode);
+  res.send(result);
 });
 
 app.get("/about", function (request, response) {
