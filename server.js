@@ -29,6 +29,12 @@ app.get("/trip/:trip", async function (req, res) {
     }
   );
   newResult = JSON.parse(newResult);
+  newResult["link"] = "https://www.tryp.com/en/packages/" + req.params.trip;
+  newResult["EXTRA_INFO_FOR_ASSISTANT"] = [
+    "Optionally make a guide about the trip",
+    "Don't use images unless necessary",
+    "Do not make info up",
+  ];
   res.send(newResult);
 });
 app.get("/api/search", async function (req, res) {
