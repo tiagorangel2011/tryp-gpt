@@ -16,4 +16,3 @@ Tryp.com unofficial ChatGPT Plugin. Abilities:
 
 ### TODO
 * More features (?)
-* Extra info for assistant
