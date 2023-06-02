@@ -230,7 +230,7 @@
         }
       }
     },
-        "/api/aqi": {
+    "/api/aqi": {
       "get": {
         "operationId": "get_aqi",
         "summary": "Get city air quality with latitude and longitude",
@@ -302,7 +302,7 @@
         "properties": {}
       },
       "AboutTryp": {
-        "type": "text",
+        "type": "string",
         "properties": {}
       }
     }

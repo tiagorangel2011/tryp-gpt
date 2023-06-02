@@ -1,4 +1,7 @@
 {
     "manifest-fetched": 1,
-    "get_aqi": 1
+    "get_aqi": 1,
+    "search_event": 20,
+    "get_trip": 3,
+    "get_weather": 1
 }

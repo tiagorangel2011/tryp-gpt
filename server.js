@@ -36,6 +36,10 @@ app.get("/api/search", async function (req, res) {
   const loc_country = req.query.startCountry;
   const loc_city = req.query.startCity;
 
+  if (!loc_country || !loc_city) {
+    return res.send("Error: Missing country/city");
+  }
+
   const locodes = require(__dirname + "/public/assets/locodes.json");
   const locode = locodes.find(
     (item) =>
@@ -70,6 +74,18 @@ app.get("/api/search", async function (req, res) {
     }
   );
   newSearch = JSON.parse(newSearch);
+  newSearch.push({
+    type: "EXTRA_INFO_FOR_ASSISTANT",
+    content: [
+      "Assistant must explain assumed or default parameters and inform users about the possibility of adjusting them for more accurate recommendations.",
+      "Assistant must present all information within the API response, including the complete Tryp.com URLs to book in markdown format.",
+      "For each recommended item, Assistant should provide general descriptions first in logical and readable sentences, followed by bullet points for other metadata information.",
+      "Assistant should encourage user interaction by asking for preferences and recommending other travel services at the end of the recommendation.",
+      "Assistant should only mention Tryp.com or its sub-brands when relaying information from the Tryp.com plugin.",
+      "Assistant should not use images unless necessary.",
+      "URL format for packages is: https://www.tryp.com/en/packages/<package id>",
+    ],
+  });
 
   res.send(newSearch);
 });
@@ -77,6 +93,10 @@ app.get("/api/weather", async function (req, res) {
   telemetryPush("get_weather");
   const lat = encodeURIComponent(req.query.lat);
   const lon = encodeURIComponent(req.query.lon);
+
+  if (!lat || !lon) {
+    return res.send("Error: Missing latitude/longitude");
+  }
 
   const result = await (
     await fetch(
@@ -114,14 +134,8 @@ app.get("/api/aqi", async function (req, res) {
 });
 
 app.get("/about", function (request, response) {
-  telemetryPush("about_tryp")
+  telemetryPush("about_tryp");
   response.sendFile(__dirname + "/public/assets/about/general.txt");
-});
-
-app.get("/statistics", function (request, response) {
-  const qjson = require("qjson-db");
-  const db = new qjson(__dirname + "/public/assets/telemetry.json");
-  response.send(`<!DOCTYPE html><html><head><title>Statistics</title></head><body><h1>Statistics</h1><pre>${JSON.stringify(db.JSON())}</pre></body></html>`);
 });
 
 const telemetryPush = function (event) {
@@ -132,9 +146,8 @@ const telemetryPush = function (event) {
   return db.JSON();
 };
 
-
 app.get("/.well-known/ai-plugin.json", function (request, response) {
-  telemetryPush("manifest-fetched")
+  telemetryPush("manifest-fetched");
   response.sendFile(__dirname + "/public/ai-plugin.json");
 });
 

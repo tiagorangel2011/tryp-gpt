@@ -1,0 +1,16 @@
+
+app.get("/api/booking", async function (req, res) {
+  const options = {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ purchase_id: req.query.id, email: req.query.email }),
+  };
+  console.log(options);
+  const result = await (
+    await fetch(
+      "https://juuwx2ncp1.execute-api.eu-central-1.amazonaws.com/prod/get_booking",
+      options
+    )
+  ).json();
+  res.send(result);
+});

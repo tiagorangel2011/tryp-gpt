@@ -13,3 +13,7 @@ Tryp.com unofficial ChatGPT Plugin. Abilities:
 3. Change server url in both "openapi.json" and "ai-plugin.json"
 4. Follow OpenAI's instructions to add the plugin to the store
 5. Done!
+
+### TODO
+* More features (?)
+* Extra info for assistant
