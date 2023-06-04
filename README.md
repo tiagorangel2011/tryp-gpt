@@ -8,6 +8,7 @@ Tryp.com unofficial ChatGPT Plugin. Abilities:
 * Get AQI
 * Get currency exchange
 * About Tryp
+* Web browsing: news, forecast and search
 
 ### How to deploy
 1. Start by choosing your plugin server. Choose wisely.
