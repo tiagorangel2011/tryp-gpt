@@ -325,6 +325,53 @@
         }
       }
     },
+    "/api/map": {
+      "get": {
+        "operationId": "map",
+        "summary": "Get a map. Returns a PNG image.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "spn",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": " The area or span around the center point. Consist of two decimal numbers describing the latitude and longitude delta. Required. Format: LAT,LON"
+          },
+          {
+            "in": "query",
+            "name": "center",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The center of the map. Required. Format: LAT,LON"
+          },
+          {
+            "in": "query",
+            "name": "annotations",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Annotations on the map, in JSON. Optional. Example: [{'point':'LAT,LON','color':'66abff'}]"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/about": {
       "get": {
         "operationId": "AboutTryp",

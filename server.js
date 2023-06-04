@@ -1,5 +1,6 @@
 const fetch = require("node-fetch");
 const express = require("express");
+const HOST_URL = "tryp-gpt.glitch.me";
 const app = express();
 
 app.use(express.static("public"));
@@ -194,6 +195,45 @@ app.get("/api/aqi", async function (req, res) {
   ).json();
 
   res.send(result);
+});
+app.get("/api/map", async function (req, res) {
+  const spn = encodeURIComponent(req.query.spn);
+  const center = encodeURIComponent(req.query.center);
+  var annotations = encodeURIComponent(req.query.annotations);
+  if (!annotations || annotations == "null" || annotations == "undefined") {
+    annotations = "[]";
+  }
+  res.send({
+    status: "OK",
+    map: {
+      markdown: `![Map](https://${HOST_URL}/api/map.png?spn=${spn}&center=${center}&annotations=${annotations})`,
+      url: `https://${HOST_URL}/api/map.png?spn=${spn}&center=${center}&annotations=${annotations}`,
+    },
+    details: {
+      spn: spn,
+      center: center,
+      annotations: annotations
+    }
+  });
+});
+app.get("/api/map.png", async function (req, res) {
+  const spn = encodeURIComponent(req.query.spn);
+  const center = encodeURIComponent(req.query.center);
+  var annotations = encodeURIComponent(req.query.annotations);
+  if (!annotations || annotations == "null" || annotations == "undefined") {
+    annotations = "[]";
+  }
+
+  const response = await fetch(
+    `https://external-content.duckduckgo.com/ssv2/?scale=2&lang=en&colorScheme=light&format=png&size=400x300&spn=${spn}&center=${center}&annotations=${annotations}`
+  );
+  if (!response.ok) {
+    return res.send("Error: Failed to fetch image. Please check parameters.");
+  }
+
+  const contentType = response.headers.get("content-type");
+  res.set("Content-Type", contentType);
+  response.body.pipe(res);
 });
 app.get("/about", function (request, response) {
   telemetryPush("about_tryp");
