@@ -103,39 +103,69 @@ app.get("/api/weather", async function (req, res) {
   if (!lat || !lon) {
     return res.send("Error: Missing latitude/longitude");
   }
-
-  const result = await (
-    await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_sum,rain_sum&past_days=7&forecast_days=16&timezone=auto`,
-      {
-        method: "GET",
-        headers: {
-          "content-type": "application/json",
-        },
-      }
-    )
-  ).json();
+  try {
+    var result = await (
+      await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_sum,rain_sum&past_days=7&forecast_days=16&timezone=auto`,
+        {
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+          },
+        }
+      )
+    ).json();
+  } catch {
+    const ddg = require("duck-duck-scrape");
+    var result = await ddg.forecast(`${lat}, ${lon}`);
+  }
 
   res.send(result);
 });
 app.get("/api/currency", async function (req, res) {
   telemetryPush("get_currency");
-  
+
   const result = await (
-    await fetch(
-      `https://api.frankfurter.app/latest`,
-      {
-        method: "GET",
-        headers: {
-          "content-type": "application/json",
-        },
-      }
-    )
+    await fetch(`https://api.frankfurter.app/latest`, {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
   ).json();
 
   res.send(result);
 });
+app.get("/api/web", async function (req, res) {
+  telemetryPush("web");
 
+  const ddg = require("duck-duck-scrape");
+  var request = req.query.type;
+  var query = req.query.q;
+  if (!(request == "search") && !(request == "news")) {
+    res.send("Error: Request must be either 'search' or 'news'");
+  }
+  if (!query) {
+    res.send("Error: Invalid query parameter");
+  }
+
+  if (request == "search") {
+    var result = await ddg.search(query, {
+      safeSearch: ddg.SafeSearchType.STRICT,
+    });
+  }
+  if (request == "news") {
+    var result = await ddg.searchNews(query, {
+      safeSearch: ddg.SafeSearchType.STRICT,
+    });
+  }
+  if (request == "forecast") {
+    var result = await ddg.forecast(query);
+  }
+  result["DISCLAIMER"] =
+    "This results are search results from the web. Tryp.com is not responsable for anything inside them.";
+  res.send(result);
+});
 app.get("/api/aqi", async function (req, res) {
   telemetryPush("get_aqi");
   const lat = encodeURIComponent(req.query.lat);
@@ -155,7 +185,6 @@ app.get("/api/aqi", async function (req, res) {
 
   res.send(result);
 });
-
 app.get("/about", function (request, response) {
   telemetryPush("about_tryp");
   response.sendFile(__dirname + "/public/assets/about/general.txt");
