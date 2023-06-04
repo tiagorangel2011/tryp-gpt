@@ -32,7 +32,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/fetchPackage"
+                  "$ref": "#/components/schemas/response"
                 }
               }
             }
@@ -184,7 +184,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/search"
+                  "$ref": "#/components/schemas/response"
                 }
               }
             }
@@ -222,7 +222,26 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/air_api"
+                  "$ref": "#/components/schemas/response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/currency": {
+      "get": {
+        "operationId": "currency",
+        "summary": "Get current currency exchange from the European Central Bank",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response"
                 }
               }
             }
@@ -260,7 +279,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/air_api"
+                  "$ref": "#/components/schemas/response"
                 }
               }
             }
@@ -289,15 +308,7 @@
   },
   "components": {
     "schemas": {
-      "fetchPackage": {
-        "type": "object",
-        "properties": {}
-      },
-      "search": {
-        "type": "object",
-        "properties": {}
-      },
-      "air_api": {
+      "response": {
         "type": "object",
         "properties": {}
       },
