@@ -118,6 +118,23 @@ app.get("/api/weather", async function (req, res) {
 
   res.send(result);
 });
+app.get("/api/currency", async function (req, res) {
+  telemetryPush("get_currency");
+  
+  const result = await (
+    await fetch(
+      `https://api.frankfurter.app/latest`,
+      {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+        },
+      }
+    )
+  ).json();
+
+  res.send(result);
+});
 
 app.get("/api/aqi", async function (req, res) {
   telemetryPush("get_aqi");
