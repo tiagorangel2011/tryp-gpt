@@ -9,10 +9,10 @@
   },
   "api": {
     "type": "openapi",
-    "url": "https://tryp-gpt.vercel.app/openapi.json",
+    "url": "https://tryp-gpt.glitch.me/openapi.json",
     "is_user_authenticated": false
   },
-  "logo_url": "https://tryp-gpt.vercel.app/assets/logo.png",
+  "logo_url": "https://tryp-gpt.glitch.me/assets/logo.png",
   "contact_email": "info@tryp.com",
   "legal_info_url": "https://www.tryp.com/en/terms-and-conditions"
 }
