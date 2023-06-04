@@ -299,7 +299,7 @@
               "type": "string"
             },
             "required": true,
-            "description": "Type of web feature wanted. Available: search, news, forecast"
+            "description": "Type of web feature wanted. Available: search, news, forecast, time"
           },
           {
             "in": "query",

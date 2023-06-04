@@ -142,8 +142,15 @@ app.get("/api/web", async function (req, res) {
   const ddg = require("duck-duck-scrape");
   var request = req.query.type;
   var query = req.query.q;
-  if (!(request == "search") && !(request == "news")) {
-    res.send("Error: Request must be either 'search' or 'news'");
+  if (
+    !(request == "search") &&
+    !(request == "news") &&
+    !(request == "forecast") &&
+    !(request == "time")
+  ) {
+    res.send(
+      "Error: Request must be either 'search', 'news', 'forecast' or 'time'"
+    );
   }
   if (!query) {
     res.send("Error: Invalid query parameter");
@@ -161,6 +168,9 @@ app.get("/api/web", async function (req, res) {
   }
   if (request == "forecast") {
     var result = await ddg.forecast(query);
+  }
+  if (request == "time") {
+    var result = await ddg.time(query);
   }
   result["DISCLAIMER"] =
     "This results are search results from the web. Tryp.com is not responsable for anything inside them.";
