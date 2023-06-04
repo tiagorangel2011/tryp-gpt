@@ -287,6 +287,44 @@
         }
       }
     },
+    "/api/web": {
+      "get": {
+        "operationId": "web",
+        "summary": "Use web features.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Type of web feature wanted. Available: search, news, forecast"
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Query string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/about": {
       "get": {
         "operationId": "AboutTryp",
