@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://tryp-gpt.vercel.app/"
+      "url": "https://tryp-gpt.glitch.me/"
     }
   ],
   "paths": {
