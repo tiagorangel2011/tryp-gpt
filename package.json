@@ -10,13 +10,14 @@
   "dependencies": {
     "express": "^4.18.1",
     "node-fetch": "^2.6.11",
-    "qjson-db": "^1.0.2"
+    "qjson-db": "^1.0.2",
+    "duck-duck-scrape": "^2.2.4"
   },
   "engines": {
     "node": "14.x"
   },
   "repository": {
-    "url": "https://glitch.com/edit/#!/tryp-gpt"
+    "url": "https://github.com/tiagorangel2011/tryp-gpt"
   },
   "license": "CC BY 4.0",
   "keywords": [
@@ -25,6 +26,7 @@
     "express",
     "chatgpt",
     "tryp-com",
-    "chatgpt-plugin"
+    "chatgpt-plugin",
+    "glitch"
   ]
 }
