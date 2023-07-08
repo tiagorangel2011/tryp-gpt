@@ -10,6 +10,7 @@ Tryp.com unofficial ChatGPT Plugin. Abilities:
 * About Tryp
 * Web browsing: news, forecast, search and local time
 * Creating maps
+   Subscribe to the newsletter
 
 ### How to deploy
 1. Start by choosing your plugin server. Choose wisely.
