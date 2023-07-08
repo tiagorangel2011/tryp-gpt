@@ -14,7 +14,7 @@ app.get("/trip/:trip", async function (req, res) {
       {
         credentials: "omit",
         headers: {
-          "user-id": process.env.USER,
+          "user-id": getUserID(),
           "x-api-key": process.env.TOKEN,
           source: "",
         },
@@ -203,7 +203,7 @@ app.get("/api/map", async function (req, res) {
   if (!annotations || annotations == "null" || annotations == "undefined") {
     annotations = "[]";
   }
-  telemetryPush("create-map")
+  telemetryPush("create-map");
   res.send({
     status: "OK",
     map: {
@@ -213,8 +213,8 @@ app.get("/api/map", async function (req, res) {
     details: {
       spn: spn,
       center: center,
-      annotations: annotations
-    }
+      annotations: annotations,
+    },
   });
 });
 app.get("/api/map.png", async function (req, res) {
@@ -235,25 +235,75 @@ app.get("/api/map.png", async function (req, res) {
   const contentType = response.headers.get("content-type");
   res.set("Content-Type", contentType);
   response.body.pipe(res);
-  telemetryPush("view_map")
+  telemetryPush("view_map");
 });
 app.get("/api/subscribe", async function (req, res) {
   const email = req.query.email.trim();
-  
+
   if (!email || !email.includes("@") || !email.includes(".")) {
-    res.send({status: "err", message: "Invalid or missing email"});
+    res.send({ status: "err", message: "Invalid or missing email" });
     return;
   }
+
+  fetch(
+    `https://0sc7coilmb.execute-api.eu-central-1.amazonaws.com/prod?email=${email}&event_type=subscribe&user_currency=EUR&location=CHATGPT`,
+    {
+      method: "POST",
+      headers: {
+        "x-api-key": process.env.TOKEN,
+        "user-id": getUserID(),
+      },
+    }
+  );
+
+  res.send({
+    status: "ok",
+    message:
+      "Done! You have been successfully subscribed to the Tryp.com newsletter. Thank you for subscribing.",
+  });
+});
+app.get("/api/manage_booking", async function (req, res) {
+  const id = req.query.id;
+  const email = req.query.email;
+  if (!id || !email) {
+    return res.send({
+      status: "error",
+      message: "Invalid booking ID or email",
+    });
+  }
+  telemetryPush("manage_booking");
+  const options = {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-api-key": process.env.TOKEN,
+      "user-id": getUserID(),
+    },
+    body: JSON.stringify({ purchase_id: id, email: email }),
+  };
   
-fetch(`https://0sc7coilmb.execute-api.eu-central-1.amazonaws.com/prod?email=${email}&event_type=subscribe&user_currency=EUR&location=CHATGPT`, {
-  method: 'POST',
-  headers: {
-    'x-api-key': process.env.TOKEN,
-    'user-id': process.env.USER
-  }})
-  
-  res.send({status: "ok", message: "Done! You have been successfully subscribed to the Tryp.com newsletter. Thank you for subscribing."})
-})
+
+  var data = await (
+    await fetch(
+      "https://juuwx2ncp1.execute-api.eu-central-1.amazonaws.com/prod/get_booking",
+      options
+    )
+  ).json();
+
+  data = { PACKAGE: data };
+
+  data.VIEW_MORE_LINK = `https://www.tryp.com/en/manage-booking?email=${encodeURIComponent(
+    email
+  )}&bid=${id}`;
+  data.WARNING_FOR_USER = `Do NOT share your email/booking ID pair with anyone, as it allows access to your package.`;
+  data.INSTRUCTIONS_FOR_AI = [
+    "1. Present the info above in a detailed but organized format",
+    "2. Use markdown and it's elements to format the data",
+    "3. Do not provide excessive data, except when asked",
+  ];
+
+  res.send(data);
+});
 app.get("/about", function (request, response) {
   telemetryPush("about_tryp");
   response.sendFile(__dirname + "/public/assets/about/general.txt");
@@ -266,6 +316,18 @@ const telemetryPush = function (event) {
   db.set(event, (db.get(event) || 0) + 1);
   return db.JSON();
 };
+const getUserID = function () {
+  function makeid(length) {
+   var result           = '';
+   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+   var charactersLength = characters.length;
+   for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+   return result;
+}
+  return `CHATGPT-PLUGIN-${makeid(4)}-${makeid(4)}-${makeid(11)}`
+}
 
 app.get("/.well-known/ai-plugin.json", function (request, response) {
   telemetryPush("manifest-fetched");

@@ -401,6 +401,44 @@
         }
       }
     },
+    "/api/manage_booking": {
+      "get": {
+        "operationId": "manage_booking",
+        "summary": "Manage a booking",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "email",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The email used when booking the package"
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The booking ID (recieved on the confirmation email)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/about": {
       "get": {
         "operationId": "AboutTryp",
