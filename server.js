@@ -203,6 +203,7 @@ app.get("/api/map", async function (req, res) {
   if (!annotations || annotations == "null" || annotations == "undefined") {
     annotations = "[]";
   }
+  telemetryPush("create-map")
   res.send({
     status: "OK",
     map: {
@@ -234,7 +235,25 @@ app.get("/api/map.png", async function (req, res) {
   const contentType = response.headers.get("content-type");
   res.set("Content-Type", contentType);
   response.body.pipe(res);
+  telemetryPush("view_map")
 });
+app.get("/api/subscribe", async function (req, res) {
+  const email = req.query.email.trim();
+  
+  if (!email || !email.includes("@") || !email.includes(".")) {
+    res.send({status: "err", message: "Invalid or missing email"});
+    return;
+  }
+  
+fetch(`https://0sc7coilmb.execute-api.eu-central-1.amazonaws.com/prod?email=${email}&event_type=subscribe&user_currency=EUR&location=CHATGPT`, {
+  method: 'POST',
+  headers: {
+    'x-api-key': process.env.TOKEN,
+    'user-id': process.env.USER
+  }})
+  
+  res.send({status: "ok", message: "Done! You have been successfully subscribed to the Tryp.com newsletter. Thank you for subscribing."})
+})
 app.get("/about", function (request, response) {
   telemetryPush("about_tryp");
   response.sendFile(__dirname + "/public/assets/about/general.txt");
@@ -242,7 +261,7 @@ app.get("/about", function (request, response) {
 
 const telemetryPush = function (event) {
   const qjson = require("qjson-db");
-  const db = new qjson(__dirname + "/public/assets/telemetry.json");
+  const db = new qjson(__dirname + "/.data/telemetry.json");
 
   db.set(event, (db.get(event) || 0) + 1);
   return db.JSON();

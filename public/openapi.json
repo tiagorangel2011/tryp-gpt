@@ -372,6 +372,35 @@
         }
       }
     },
+    "/api/subscribe": {
+      "get": {
+        "operationId": "subscribe",
+        "summary": "Subscribe to our newsletter",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "email",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The user's email"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/about": {
       "get": {
         "operationId": "AboutTryp",
