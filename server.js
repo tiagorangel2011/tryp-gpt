@@ -351,10 +351,13 @@ app.get("/.well-known/ai-plugin.json", function (request, response) {
   response.sendFile(__dirname + "/public/ai-plugin.json");
 });
 
-fetch("https://tryp-gpt.glitch.me/api/status");
+if (HOST_URL.includes(".glitch.me")) {
+  fetch("https://" + HOST_URL + "/api/status");
 setTimeout(function () {
-  fetch("https://tryp-gpt.glitch.me/api/status");
+  fetch("https://" + HOST_URL + "/api/status");
 }, 18000);
+}
+
 
 const listener = app.listen(process.env.PORT, function () {
   console.log("Your app is listening on port " + listener.address().port);
