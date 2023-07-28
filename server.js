@@ -35,6 +35,7 @@ app.get("/trip/:trip", async function (req, res) {
     "Optionally make a guide about the trip",
     "Don't use images unless necessary",
     "Do not make info up",
+    "No results provided = No results found",
   ];
   res.send(newResult);
 });
@@ -281,7 +282,6 @@ app.get("/api/manage_booking", async function (req, res) {
     },
     body: JSON.stringify({ purchase_id: id, email: email }),
   };
-  
 
   var data = await (
     await fetch(
@@ -304,6 +304,22 @@ app.get("/api/manage_booking", async function (req, res) {
 
   res.send(data);
 });
+app.get("/api/status", async function (req, res) {
+  await (
+    await fetch(
+      "https://4221xw1qej.execute-api.eu-central-1.amazonaws.com/prod",
+      {
+        credentials: "omit",
+        headers: {
+          "user-id": getUserID(),
+          "x-api-key": process.env.TOKEN,
+        },
+        method: "GET",
+      }
+    )
+  ).text();
+  res.send("ok");
+});
 app.get("/about", function (request, response) {
   telemetryPush("about_tryp");
   response.sendFile(__dirname + "/public/assets/about/general.txt");
@@ -318,21 +334,27 @@ const telemetryPush = function (event) {
 };
 const getUserID = function () {
   function makeid(length) {
-   var result           = '';
-   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-   var charactersLength = characters.length;
-   for ( var i = 0; i < length; i++ ) {
+    var result = "";
+    var characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
-   }
-   return result;
-}
-  return `CHATGPT-PLUGIN-${makeid(4)}-${makeid(4)}-${makeid(11)}`
-}
+    }
+    return result;
+  }
+  return `CHATGPT-PLUGIN-${makeid(4)}-${makeid(4)}-${makeid(11)}`;
+};
 
 app.get("/.well-known/ai-plugin.json", function (request, response) {
   telemetryPush("manifest-fetched");
   response.sendFile(__dirname + "/public/ai-plugin.json");
 });
+
+fetch("https://tryp-gpt.glitch.me/api/status");
+setTimeout(function () {
+  fetch("https://tryp-gpt.glitch.me/api/status");
+}, 18000);
 
 const listener = app.listen(process.env.PORT, function () {
   console.log("Your app is listening on port " + listener.address().port);
